@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Asteroides de la NASA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Asteroides de la NASA</h1>
+  <ul id="asteroid-list"></ul>
+
+  <script>
+    fetch('/asteroids')
+      .then(response => response.json())
+      .then(data => {
+        const asteroidList = document.getElementById('asteroid-list');
+
+        for (const date in data) {
+          const asteroids = data[date];
+          for (const asteroid of asteroids) {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+              <strong>Nombre:</strong> ${asteroid.name} <br>
+              <strong>Diámetro mínimo:</strong> ${asteroid.estimated_diameter.kilometers.estimated_diameter_min} km <br>
+              <strong>Diámetro máximo:</strong> ${asteroid.estimated_diameter.kilometers.estimated_diameter_max} km <br>
+              <strong>Distancia:</strong> ${asteroid.close_approach_data[0].miss_distance.kilometers} km
+            `;
+            asteroidList.appendChild(listItem);
+          }
+        }
+      })
+      .catch(error => console.error(error));
+  </script>
+</body>
+</html>
